@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Ujian Online</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS untuk menyembunyikan footer Trinket */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        /* Coba sembunyikan elemen footer Trinket */
+        footer, 
+        .footer,
+        [class*="trinket"],
+        [id*="trinket"],
+        [class*="footer"],
+        [id*="footer"] {
+            display: none !important;
+        }
+        
+        /* Style aplikasi Anda */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            margin: 0;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .exam-info {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .exam-info h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .exam-info ul {
+            list-style-type: none;
+            padding-left: 10px;
+        }
+        
+        .exam-info li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .exam-info li:before {
+            content: "•";
+            color: #3498db;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .instructions {
+            background-color: #e8f4fc;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid #d1ecf1;
+        }
+        
+        .instructions h3 {
+            color: #0c5460;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .instructions h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        
+        .start-section {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn-start {
+            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 16px 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-start:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(52, 152, 219, 0.6);
+        }
+        
+        .btn-start:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-start i {
+            margin-right: 10px;
+        }
+        
+        .loading {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .footer-custom {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 1px solid #ecf0f1;
+        }
+        
+        .random-notice {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            color: #856404;
+        }
+        
+        .result {
+            display: none;
+            background-color: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .result h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .btn-go {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+        
+        .btn-go:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .btn-start {
+                padding: 14px 40px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-graduation-cap"></i> Sistem Ujian Online</h1>
+            <p>Platform Ujian Digital Terpercaya</p>
+        </div>
+        
+        <div class="content">
+            <div class="exam-info">
+                <h2>Informasi Ujian</h2>
+                <ul>
+                    <li>Ujian ini terdiri dari 2 paket soal dengan tingkat kesulitan yang setara</li>
+                    <li>Sistem akan secara acak memilih paket soal untuk Anda</li>
+                    <li>Pastikan koneksi internet stabil selama ujian berlangsung</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> Petunjuk Pengerjaan</h3>
+                <ol>
+                    <li>Klik tombol <strong>MULAI UJIAN</strong> di bawah untuk memulai</li>
+                    <li>Anda akan diarahkan secara acak ke salah satu paket soal</li>
+                    <li>Bacalah instruksi pada setiap soal dengan teliti</li>
+                    <li>Kerjakan soal dengan jujur dan mandiri</li>
+                    <li>Periksa kembali jawaban sebelum mengirimkan</li>
+                </ol>
+            </div>
+            
+            <div class="random-notice">
+                <i class="fas fa-random"></i> Setiap siswa akan mendapatkan paket soal yang berbeda secara acak
+            </div>
+            
+            <div class="start-section">
+                <p>Apakah Anda sudah siap untuk mengikuti ujian?</p>
+                <button class="btn-start" id="startExam">
+                    <i class="fas fa-play-circle"></i> MULAI UJIAN
+                </button>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Mengarahkan ke paket ujian...</p>
+                </div>
+                
+                <div class="result" id="result">
+                    <h3><i class="fas fa-file-alt"></i> Paket Ujian Terpilih</h3>
+                    <p>Anda telah mendapatkan <strong id="packageName">Paket A</strong></p>
+                    <p>Klik tombol di bawah untuk membuka ujian:</p>
+                    <a id="examLink" href="#" target="_blank">
+                        <button class="btn-go">
+                            <i class="fas fa-external-link-alt"></i> Buka Ujian
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-custom">
+            <p>&copy; 2025 Sistem Ujian Online. Diupdate 10 November 2025.</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('startExam').addEventListener('click', function() {
+            // Tampilkan animasi loading
+            document.getElementById('loading').style.display = 'block';
+            
+            // Daftar URL Google Form untuk paket ujian
+            const examPackages = [
+                { name: "Paket A", url: "https://forms.gle/qUGN86RVzrFxyMN26" },
+                { name: "Paket B", url: "https://forms.gle/WhzcKWm6KDUZX3Z79" }
+            ];
+            
+            // Simulasi loading selama 2 detik
+            setTimeout(function() {
+                // Sembunyikan loading
+                document.getElementById('loading').style.display = 'none';
+                
+                // Pilih paket ujian secara acak
+                const randomIndex = Math.floor(Math.random() * examPackages.length);
+                const selectedPackage = examPackages[randomIndex];
+                
+                // Tampilkan hasil
+                document.getElementById('packageName').textContent = selectedPackage.name;
+                document.getElementById('examLink').href = selectedPackage.url;
+                document.getElementById('result').style.display = 'block';
+                
+                // Scroll ke hasil
+                document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+            }, 2000);
+        });
+        
+        // Coba sembunyikan elemen Trinket dengan JavaScript
+        window.addEventListener('load', function() {
+            // Cari dan sembunyikan elemen yang mengandung kata "trinket"
+            const allElements = document.querySelectorAll('*');
+            allElements.forEach(element => {
+                const id = element.id ? element.id.toLowerCase() : '';
+                const className = element.className ? element.className.toLowerCase() : '';
+                const tagName = element.tagName ? element.tagName.toLowerCase() : '';
+                
+                if (id.includes('trinket') || className.includes('trinket') || 
+                    id.includes('footer') || className.includes('footer')) {
+                    element.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
